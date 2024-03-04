@@ -46,3 +46,4 @@ new-cdk-app.sh
 **As you can see in the diagram, CDK generated a custom resource, that is because we used the auto delete objects option for the s3 Bucket.**                          
 ![extended_diagram.png](images/extended_diagram.png)
  
+![cdk-demo](https://github.com/RobertoTorino/cdk_demo/assets/390603/e3e7aaf9-ffbe-48ce-aa0d-371a224c5460)

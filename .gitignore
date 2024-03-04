@@ -1,0 +1,25 @@
+# General
+!docs/*
+!demos
+!demo
+!/_cdk/
+!/_terraform/
+
+# Intellij
+/.idea/
+
+# Node
+node_modules/
+dist/
+
+# Java class files
+*.class
+
+# Python bytecode
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Test reports
+TEST*.xml

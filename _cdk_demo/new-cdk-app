@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+import * as cdk from 'aws-cdk-lib';
+import {NewCdkAppStack} from '../lib/new-cdk-app-stack';
+import {aws_cloudformation, Stack, Tags} from "aws-cdk-lib";
+
+const env = {
+    account: process.env.CDK_SYNTH_ACCOUNT || process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_SYNTH_REGION || process.env.CDK_DEFAULT_REGION,
+};
+
+enum Environment {
+    dev = 'dev'
+}
+
+const construct = 'cfd-cdk-demo';
+
+const addTags = (stack: Stack, environment: Environment) => {
+    Tags.of(stack).add('Application', construct, {
+        applyToLaunchedInstances: true,
+        includeResourceTypes: [],
+    });
+    Tags.of(stack).add('Stage', environment, {
+        applyToLaunchedInstances: true,
+        includeResourceTypes: [],
+    });
+    Tags.of(stack).add('Stackname', stack.stackName, {
+        applyToLaunchedInstances: true,
+        includeResourceTypes: [],
+    });
+};
+
+const stackNameValidation = (thisStackName: typeof aws_cloudformation.CfnStack.name) => {
+    if (thisStackName.length > 20) {
+        throw new Error(`Validate: stackname must be <= 16 characters. Stack name: '${thisStackName}'`);
+    }
+    const nameSyntaxValidation = /^.*$/;
+    if (!nameSyntaxValidation.test((thisStackName))) {
+        throw new Error(`Validate: stackname must match the regular expression: ${nameSyntaxValidation.toString()}, got '${thisStackName}'`);
+    }
+};
+const app = new cdk.App();
+const newCdkAppStack = new NewCdkAppStack(app, 'NewCdkAppStack', {
+    stackName: 'NewCdkAppStack',
+    description: 'Demo stack for CF&D onboarding.',
+    env,
+});
+addTags(newCdkAppStack, Environment.dev);
+stackNameValidation('NewCdkAppStack');
+
+app.synth();
